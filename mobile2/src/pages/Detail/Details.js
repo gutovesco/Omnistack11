@@ -1,7 +1,7 @@
 import React from "react";
 import { Feather } from "@expo/vector-icons";
 import { View, Text, Image, TouchableOpacity, Linking} from "react-native";
-import { useNavigation} from "@react-navigation/native";
+import { useNavigation, useRoute} from "@react-navigation/native";
 import logoImg from "../../assets/logo.png";
 import * as MailComposer from 'expo-mail-composer'
 
@@ -9,16 +9,18 @@ import styles from "./styles";
 
 export default function Details() {
     const navigation = useNavigation();
-    const message = 'Olá eu, to entrando em contato pois estou fazendo a omnistack'
-
+    const route = useRoute()
+    const incident = route.params.incident
+    const message = `Olá ${incident.name}, to entrando em contato pois estou fazendo a omnistack`
+    
     function navigateBack() {
         navigation.goBack();
     }
 
     function sendMail(){
         MailComposer.composeAsync({
-            subject: 'Heroi do caso: cadelinha',
-            recipients: ['guto.vesco@hotmail.com'],
+            subject: `Heroi do caso: ${incident.title}`,
+            recipients: [incident.email],
             body: message
         })
     }
@@ -42,15 +44,15 @@ export default function Details() {
     <View style={styles.incident}>
         <Text style={[styles.incidentProperty, { marginTop: 0 }]}>ONG:</Text>
         <Text style={styles.incidentValue}>
-            incident.name de incident.city/incident.uf
+            {incident.name} de {incident.city}/{incident.uf}
         </Text>
 
         <Text style={styles.incidentProperty}>CASO:</Text>
-        <Text style={styles.incidentValue}>incident.title</Text>
+        <Text style={styles.incidentValue}>{incident.title}</Text>
 
         <Text style={styles.incidentProperty}>VALOR:</Text>
         <Text style={styles.incidentValue}>
-
+            R${incident.value},00
         </Text>
     </View>
 
